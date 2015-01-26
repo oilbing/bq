@@ -1444,74 +1444,166 @@ return this;
 this.stopDone=function(hook){
 bq.asyc_remove(hook);
 };
-//stararr,开始的样式,delayarr,结束的样式
-this.queAnimate=function(domarr,stararr,aimarr,delayarr,addnum,funarr,hook){
-var fun=this.cgStyle,n=domarr.length,m=0,that=this,obanis=this.queAnimate;
-(function lun(){
-var dom=that.dom(domarr[m]),ob2=aimarr[m],no=0,j=0,dp="",delay=delayarr?delayarr[m]:5,func,startob,ival;
-if(funarr){func=funarr[m];}
-if(stararr){startob=stararr[m];if(startob){for(var k in startob){ival=startob[k];if(!isNaN(ival)){ival=+ival}dom.style[k]=ival;}}}
-if(m>=n){if(hook){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}} return;}
-m+=1;
-for(var k in ob2){no+=1;}
-setTimeout(function ani(){
-if(hook){if(obanis.hook){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return;}}
-for(var i in ob2){
-if(dp.indexOf(i)!==-1){continue;}
-if(typeof addnum==="object"){var num=addnum[i];}
-else{var num=addnum;}
-var y=ob2[i],x=that.getStyle(dom,i);
-var tf=fun(dom,i,x,y,num);
-if(tf){dp+=i;j+=1;}
+
+this.queAnimate=function(domarr,stararr,aimarr,delayarr,numarr,funarr,hook){
+var len=domarr.length,addno=0,that=this,obani=this.queAnimate;
+(function que(){
+if(addno>=len){return;}
+var dom=that.dom(domarr[addno]),n=0,lg=0;
+var reg=/\-?[\d\.]+/g,styleob=[],str="",leftstr="",rightstr="",po="",tp,od,nw,x=0,y=0,xx=0,yy=0,num=0,midob,max=0,total=0,m=0,add=0,startob,fu,aimob,addnum,delay;
+if(stararr){startob=stararr[addno];}else{startob=stararr;}
+if(funarr){fu=funarr[addno];}else{fu=funarr;}
+aimob=aimarr[addno],delay=delayarr[addno],addnum=numarr[addno];
+if(startob){for(var i in startob){
+if(startob[i].toString().indexOf("=")!==-1){
+str=startob[i];
+od=ele.getStyle(dom,i).match(reg)[0],nw=str.match(reg)[0];
+po=str.indexOf("=")-1,tp=str.charAt(po),leftstr=str.slice(0,po),rightstr=str.slice(po+2+nw.length);
+switch(tp){
+case "+": dom.style[i]=leftstr+(od+nw)+rightstr;break;
+case "-":dom.style[i]=leftstr+(od-nw).toFixed(2)+rightstr;break;
+case "*":dom.style[i]=leftstr+(od*nw)+rightstr;break;
+case "/":dom.style[i]=leftstr+(od/nw).toFixed(2)+rightstr;break;
+case "%":dom.style[i]=leftstr+(od%nw)+rightstr;break;
+default:;break;
 }
-if(j>=no){j=null,no=null;if(func){func(dom);}lun();return ;}
+}
+else{dom.style[i]=startob[i];}}}
+for(var i in aimob){
+midob={};
+if(addnum[i]){num=addnum[i];}else{num=addnum;}
+x=that.getStyle(dom,i);if(x==="none"||x==="auto"){xx=0;midob.start=0;}else{xx=+(x.match(reg)[0]);midob.start=xx;}
+y=aimob[i].toString(),yy=+(y.match(reg)[0]);
+if(y.indexOf("=")!==-1){
+m=y.indexOf("=")-1;lg=yy.toString().length+2;
+switch(y.charAt(m)){
+case "+":yy=xx+yy;break;
+case "-":yy=(xx-yy).toFixed(2);break;
+case "*":yy=xx*yy;break;
+case "/":yy=(xx/yy).toFixed(2);break;
+case "%":yy=xx%yy;break;
+default:;break;
+}
+}
+else{m=-1;lg=yy.toString().length;}
+if(m===-1){midob.left="";midob.right=y.slice(lg);}
+else{ midob.left=y.slice(0,m);  midob.right=y.slice(m+lg);}
+if(xx<=yy){midob.type=1,max=Math.floor((yy-xx)/num)+1;}
+else{midob.type=0,max=Math.floor((xx-yy)/num)+1;}
+midob.style=i,midob.num=num,midob.max=max,midob.add=0,midob.aim=yy;
+styleob.push(midob);
+if(total<max){total=max;}
+}
+n=styleob.length;
+setTimeout(function ani(){
+var midob;
+if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}
+if(add>total){if(fu){fu(dom);} que();if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}return;}
+add+=1;
+for(var i=0;i<n;i+=1){
+midob=styleob[i];
+if(midob.add<midob.max){
+if(midob.type){
+dom.style[midob.style]=midob.left+(midob.start+(midob.num*midob.add))+midob.right;
+}
+else{
+dom.style[midob.style]=midob.left+(midob.start-(midob.num*midob.add))+midob.right;
+}
+midob.add+=1;
+}
+else if(midob.add===midob.max){
+dom.style[midob.style]=midob.left+midob.aim+midob.right;
+midob.add+=1;
+}
+else{}
+}
 window.animationframe?window.animationframe(ani):setTimeout(ani,1000/60);
 },delay);
+addno+=1;
 })();
-return this;
 };
 
-
 this.ctr_queanimate=function(hook,tf){if(tf){this.queAnimate[hook]=undefined;return;}this.queAnimate[hook]=1;};
-
-
 this.timeFun=function(name,fun,time){
 this.timeFun[name]=setTimeout(fun,time);
 };
 this.clearTimefun=function(name){this.timeFun.remove(name);}
 bq.easydict.call(this.timeFun);
-
 this.animate=function(dm,startob,aimob,delay,addnum,fu,hook){
-var dom=(dm!=="this")?this.dom(dm):this.thisDom,obani=this.animate,fun=this.cgStyle,j=0,no=0,dp="",that=this,ival;
-if(startob){for(var k in startob){ival=startob[k];dom.style[k]=isNaN(ival)?ival:(+ival);}}
-for(var i in aimob){no+=1;}
-setTimeout(function ani(){
-if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}
-for(var i in aimob){
-if(dp.indexOf(i)!==-1){continue;}
-if(typeof addnum==="object"){var num=addnum[i];}
-else{var num=addnum;}
-var y=aimob[i],x=that.getStyle(dom,i);
-var tf=fun(dom,i,x,y,num);
-if(tf){dp+=i;j+=1;}
+var dom=(dm!=="this")?this.dom(dm):this.thisDom,obani=this.animate,n=0,lg=0;
+var reg=/\-?[\d\.]+/g,styleob=[],str="",leftstr="",rightstr="",po="",tp,od,nw,x=0,y=0,xx=0,yy=0,num=0,midob,max=0,total=0,m=0,add=0;
+if(startob){for(var i in startob){
+if(startob[i].toString().indexOf("=")!==-1){
+str=startob[i];
+od=ele.getStyle(dom,i).match(reg)[0],nw=str.match(reg)[0];
+po=str.indexOf("=")-1,tp=str.charAt(po),leftstr=str.slice(0,po),rightstr=str.slice(po+2+nw.length);
+switch(tp){
+case "+": dom.style[i]=leftstr+(od+nw)+rightstr;break;
+case "-":dom.style[i]=leftstr+(od-nw).toFixed(2)+rightstr;break;
+case "*":dom.style[i]=leftstr+(od*nw)+rightstr;break;
+case "/":dom.style[i]=leftstr+(od/nw).toFixed(2)+rightstr;break;
+case "%":dom.style[i]=leftstr+(od%nw)+rightstr;break;
+default:;break;
 }
-if(j>=no){j=null,no=null;if(fu)fu(dom);if(hook){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);} }  return;}
+}
+else{dom.style[i]=startob[i];}}}
+for(var i in aimob){
+midob={};
+if(addnum[i]){num=addnum[i];}else{num=addnum;}
+x=this.getStyle(dom,i);if(x==="none"||x==="auto"){xx=0;midob.start=0;}else{xx=+(x.match(reg)[0]);midob.start=xx;}
+y=aimob[i].toString(),yy=+(y.match(reg)[0]);
+
+if(y.indexOf("=")!==-1){
+m=y.indexOf("=")-1;lg=yy.toString().length+2;
+switch(y.charAt(m)){
+case "+":yy=xx+yy;break;
+case "-":yy=(xx-yy).toFixed(2);break;
+case "*":yy=xx*yy;break;
+case "/":yy=(xx/yy).toFixed(2);break;
+case "%":yy=xx%yy;break;
+default:;break;
+}
+}
+else{m=-1;lg=yy.toString().length;}
+if(m===-1){midob.left="";midob.right=y.slice(lg);}
+else{ midob.left=y.slice(0,m);  midob.right=y.slice(m+lg);}
+if(xx<=yy){midob.type=1,max=Math.floor((yy-xx)/num)+1;}
+else{midob.type=0,max=Math.floor((xx-yy)/num)+1;}
+midob.style=i,midob.num=num,midob.max=max,midob.add=0,midob.aim=yy;
+styleob.push(midob);
+if(total<max){total=max;}
+}
+n=styleob.length;
+setTimeout(function ani(){
+var midob;
+if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}
+if(add>total){if(fu){fu(dom);}if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}return;}
+add+=1;
+for(var i=0;i<n;i+=1){
+midob=styleob[i];
+if(midob.add<midob.max){
+if(midob.type){
+dom.style[midob.style]=midob.left+(midob.start+(midob.num*midob.add))+midob.right;
+}
+else{
+dom.style[midob.style]=midob.left+(midob.start-(midob.num*midob.add))+midob.right;
+}
+midob.add+=1;
+}
+else if(midob.add===midob.max){
+dom.style[midob.style]=midob.left+midob.aim+midob.right;
+midob.add+=1;
+}
+else{}
+}
 window.animationframe?window.animationframe(ani):setTimeout(ani,1000/60);
 },delay);
 return this;
 };
-this.ctr_animate=function(hook,tf){if(tf){this.animate[hook]=undefined;return;}this.animate[hook]=1;};
-//des为{width:200px,..}这种
-this.animateBy=function(dom,des,num){
-var dom=(dom!=="this")?this.dom(dom):this.thisDom,fun=this.cgStyle,no=0;
-for(var i in des){
-if(typeof num==="object"){no=num[i];}
-else{no=num;}
-var y=des[i],x=this.getStyle(dom,i);
-if(x===y){continue;}
-fun(dom,i,x,y,no);
-}
-};
+
+
+this.ctr_animate=function(hook,tf){if(tf){this.animate[hook]=undefined;return;}else{this.animate[hook]=1;}};
+
 
 this.cssAnimate=function(dom,des,time,fun2,hook){
 // if(+time.slice(0,-1)>1){console.log("time is too long");return false;}
