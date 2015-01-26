@@ -1497,8 +1497,8 @@ if(total<max){total=max;}
 n=styleob.length;
 setTimeout(function ani(){
 var midob;
-if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}
-if(add>total){if(fu){fu(dom);} que();if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}return;}
+if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return ;}}
+if(add>total){if(fu){fu(dom);} que();if(hook){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return ;}return;}
 add+=1;
 for(var i=0;i<n;i+=1){
 midob=styleob[i];
@@ -1576,8 +1576,8 @@ if(total<max){total=max;}
 n=styleob.length;
 setTimeout(function ani(){
 var midob;
-if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}
-if(add>total){if(fu){fu(dom);}if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}}return;}
+if(hook){if(obani[hook]){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return ;}}
+if(add>total){if(fu){fu(dom);}if(hook){var obj=bq.asyc_find(hook);if(obj!==false){bq.asyc_fun(hook);}return false;}return;}
 add+=1;
 for(var i=0;i<n;i+=1){
 midob=styleob[i];
